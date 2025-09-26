@@ -14,7 +14,9 @@ const studentSchema = new mongoose.Schema(
     className: { type: mongoose.Schema.Types.ObjectId, ref: "Class" },
     branch: String,
     grade: String,
-    rollNumber: { type: String, unique: true },
+    rollNumber: String,
+
+    admissionDate: { type: Date, default: Date.now },
 
     // Flattened Parent / Guardian Info
     fatherName: String,

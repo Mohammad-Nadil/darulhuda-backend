@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const announcementSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
+    title: String,
+    description: String,
     date: { type: Date, default: Date.now },
     time: String,
+    vertical: Boolean,
     file: {
       secure_url: String,
       public_id: String,

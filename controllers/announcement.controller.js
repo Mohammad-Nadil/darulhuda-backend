@@ -2,7 +2,7 @@ import Announcement from "../models/announcements.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
-import { deletePdfFromCloudinary, uploadPdfOnCloudinary } from "../utils/cloudinary.js";
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const getAnnouncements = asyncHandler(async (req, res) => {
   const announcements = await Announcement.find().sort({ createdAt: -1 });
@@ -33,7 +33,7 @@ const addAnnouncement = asyncHandler(async (req, res) => {
   }
   let fileData = {};
   if (filePath) {
-    const { secure_url, public_id } = await uploadPdfOnCloudinary(filePath);
+    const { secure_url, public_id } = await uploadOnCloudinary(filePath);
     fileData = { secure_url, public_id };
   }
 
@@ -70,9 +70,9 @@ const updateAnnouncement = asyncHandler(async (req, res) => {
 
   if (path) {
     if (announcement.file.public_id) {
-      await deletePdfFromCloudinary(announcement.file.public_id);
+      await deleteFromCloudinary(announcement.file.public_id);
     }
-    const uploadPic = await uploadPdfOnCloudinary(path);
+    const uploadPic = await uploadOnCloudinary(path);
     secure_url = uploadPic.secure_url;
     public_id = uploadPic.public_id;
   }
@@ -106,7 +106,7 @@ const deleteAnnouncement = asyncHandler(async (req, res) => {
 
   if (announcement.file?.public_id) {
     try {
-      await deletePdfFromCloudinary(announcement.file.public_id);
+      await deleteFromCloudinary(announcement.file.public_id);
     } catch (error) {
       console.error("Cloudinary deletion error:", error);
     }

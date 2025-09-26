@@ -29,6 +29,9 @@ const addStudent = asyncHandler(async (req, res) => {
     ? await uploadOnCloudinary(path)
     : { secure_url: "", public_id: "" };
 
+  const dataToSave = { ...studentData };
+  if (!dataToSave.dob || dataToSave.dob === null) delete dataToSave.dob;
+
   const newStudent = await Student.create({
     ...studentData,
     image: { secure_url, public_id },
@@ -67,6 +70,9 @@ const updateStudent = asyncHandler(async (req, res) => {
     secure_url = uploadPic.secure_url;
     public_id = uploadPic.public_id;
   }
+
+  const dataToUpdate = { ...studentData };
+  if (!dataToUpdate.dob || dataToUpdate.dob === null) delete dataToUpdate.dob;
 
   const updatedStudent = await Student.findByIdAndUpdate(
     id,
