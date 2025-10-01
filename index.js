@@ -10,22 +10,23 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      "http://localhost:3001",
-      "http://localhost:5173",
-      "https://darulhuda-dashboard.vercel.app",
-      "https://darul-huda.vercel.app",
-    ];
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  }
-}));
-
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:3001",
+        "http://localhost:5173",
+        "https://darulhuda-dashboard.vercel.app",
+        "https://darul-huda.vercel.app",
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
 
 app.use(limiter);
 
@@ -34,7 +35,7 @@ app.use("/api", router);
 app.use(errorhandler);
 
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+  res.status(200).json({ status: "ok", message: "Darul Huda Backend is running ✅" });
 });
 
 connectDB().then(() => {
