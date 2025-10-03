@@ -12,7 +12,6 @@ import {
   deleteClass,
   findClass,
   getClass,
-  getClassForTeacher,
   updateClass,
 } from "../controllers/class.controller.js";
 import {
@@ -46,7 +45,7 @@ router.put("/student/:id", upload.single("image"), updateStudent);
 router.delete("/student/:id", deleteStudent);
 
 // Teacher Routes
-router.get("/teacher", getClassForTeacher);
+router.get("/teacher", getTeacher);
 router.get("/teacher/:id", findTeacher);
 router.post("/teacher", upload.single("image"), addTeacher);
 router.put("/teacher/:id", upload.single("image"), updateTeacher);

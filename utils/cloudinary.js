@@ -1,7 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_NAME } from "../constants.js";
 import { ApiError } from "./ApiError.js";
-import fs from "fs";
 import streamifier from "streamifier";
 
 cloudinary.config({

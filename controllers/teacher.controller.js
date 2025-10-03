@@ -3,9 +3,20 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js";
+import classModel from "../models/class.model.js";
 
 const getTeacher = asyncHandler(async (req, res) => {
-  const teachers = await Teacher.find().sort({ createdAt: -1 });
+  const teachers = await  classModel.aggregate([
+    {
+      $lookup: {
+        from: "teachers",
+        localField: "_id",
+        foreignField: "className",
+        as: "teachersOfClass",
+      },
+    },
+  ]);
+
   res.status(200).json(new ApiResponse(200, "Teachers fetched successfully", teachers));
 });
 
@@ -25,11 +36,11 @@ const findTeacher = asyncHandler(async (req, res) => {
 
 const addTeacher = asyncHandler(async (req, res) => {
   const teacherData = req.body;
-  
-  if (!teacherData.name ) {
+
+  if (!teacherData.name) {
     throw new ApiError(400, "Name field is required");
   }
-  
+
   const fileBuffer = req.file?.buffer;
   const { secure_url, public_id } = fileBuffer
     ? await uploadOnCloudinary(fileBuffer)
@@ -39,7 +50,6 @@ const addTeacher = asyncHandler(async (req, res) => {
     ...teacherData,
     image: { secure_url, public_id },
   });
-  
 
   res.status(200).json(new ApiResponse(200, "Teacher added successfully", teacher));
 });

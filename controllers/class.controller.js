@@ -17,20 +17,6 @@ const getClass = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, "Classes fetched successfully", classes));
 });
 
-const getClassForTeacher = asyncHandler(async (req, res) => {
-  const classes = await Class.aggregate([
-    {
-      $lookup: {
-        from: "teachers",
-        localField: "_id",
-        foreignField: "className",
-        as: "teachersOfClass",
-      },
-    },
-  ]);
-  res.status(200).json(new ApiResponse(200, "Classes fetched successfully", classes));
-});
-
 const findClass = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -102,4 +88,4 @@ const deleteClass = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, "Class deleted successfully"));
 });
 
-export { getClass, findClass, addClass, updateClass, deleteClass , getClassForTeacher};
+export { getClass, findClass, addClass, updateClass, deleteClass };
